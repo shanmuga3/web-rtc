@@ -7,5 +7,7 @@
 
 require('./bootstrap');
 
+import adapter from 'webrtc-adapter';
+
 import $ from 'jquery';
 window.$ = window.jQuery = $;

@@ -13,7 +13,6 @@
         
         @yield('main')
         
-        <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
         <script type="text/javascript" src="{{ asset('js/app.js?v='.$version) }}"></script>
         <script type="text/javascript" src="{{ asset('js/web_rtc.js?v='.$version) }}"></script>
     </body>
