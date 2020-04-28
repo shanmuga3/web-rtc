@@ -11067,3 +11067,9 @@ textarea {
   min-height: 100px;
 }
 
+.video-container {
+  height: 20rem;
+  width: 30rem;
+  overflow: scroll;
+}
+
