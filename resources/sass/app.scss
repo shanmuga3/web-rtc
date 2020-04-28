@@ -1,1 +1,192 @@
-//
+@import 'my_variables';
+@import '~bootstrap/scss/bootstrap';
+@charset "UTF-8";
+
+*,
+*:before,
+*:after {
+  transition: all 400ms ease;
+}
+
+html {
+  background: #fff;
+  word-wrap: break-word;
+  transition: all 0s ease;
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: $white;
+  font-family: $font-family;
+  color: $site-color;
+  font-size: $font-size;
+  overflow-x: hidden;
+  transition: all ease 0s;
+
+  &.modal-open {
+    /*IE*/
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+      header {
+        right: 8px;
+      }
+    }
+
+    /*CHROME*/
+    @media screen and (-webkit-min-device-pixel-ratio:0) {
+      header {
+        right: 8px;
+      }
+    }   
+
+    /*FIREFOX*/
+    @-moz-document url-prefix() {
+      header {
+        right: 12px;
+      }
+    }
+  }
+}
+a {
+  color: $theme-color;
+  max-width: 100%;
+
+  &:hover,
+  &:focus,
+  &:active {
+    text-decoration: none;
+    outline: none;
+    color: $link-hover;
+  }
+}
+
+img {
+  transform: translateZ(0);
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+::-webkit-scrollbar:vertical {
+  width: 8px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, .5);
+  border-radius: 5px;
+  border: 2px solid $gray-300;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 5px;  
+  background-color: $gray-300; 
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+  display: block;
+}
+
+audio,
+canvas,
+video {
+  display: inline-block;
+}
+
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+[hidden],
+template {
+  display: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+a {
+  display: inline-block;
+  color: $site-color;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  &.disc-type {
+    list-style: disc;
+    padding-left: 20px;
+  }
+}
+
+input,
+button,
+textarea,
+select {
+	&:focus {
+		outline: none;
+	}
+}
+
+input,
+select,
+textarea {
+	border: 1px solid $border-color;
+	color: $input-color;
+	@include border-radius(2px);
+	background: $white;   
+	display: block;
+	padding: 8px 10px;
+	width: 100%;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+	display: inline-block;
+	position: relative;
+	-webkit-appearance: none;
+	height: 18px;
+	width: 18px;
+	margin: 0 10px 0 0;
+	vertical-align: top;
+	flex: 0 0 auto;
+}
+
+select {
+	appearance: none;
+	transition: all 0s ease;
+
+	&:-moz-focusring {
+		text-shadow: 0 0 0 #000;
+		color: transparent;
+	}
+}
+
+textarea {
+	resize: none;
+	min-height: 100px;
+}
+
+.video-container {
+  // height: 30rem;
+}
