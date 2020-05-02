@@ -35,16 +35,22 @@ const offerOptions = {
 };
 
 // Local stream that will be reproduced on the video.
-let localStream;
-let remoteStream;
-let localPeerConnection;
-let remotePeerConnection;
-let startTime = null;
+var localStream;
+var remoteStream;
+var localPeerConnection;
+var remotePeerConnection;
+var sendChannel;
+var receiveChannel;
+var pcConstraint;
+var dataConstraint;
 
 // Video element where stream will be placed.
 const localVideo = document.querySelector('#localVideo');
 const remoteVideo = document.querySelector('#remoteVideo');
 const errorElement = document.querySelector('#errorList');
+const dataChannelSend = document.querySelector('#dataChannelSend');
+const dataChannelReceive = document.querySelector('#dataChannelReceive');
+const sendButton = document.querySelector('button#sendButton');
 
 // Gets the "other" peer connection.
 function getOtherPeer(peerConnection) {
@@ -93,23 +99,32 @@ function initLocalStream(quality)
 function initRemoteStream(quaility)
 {
 	const servers = null;
+	const pcConstraint = null;
+	const dataConstraint = null;
 
-	localPeerConnection = new RTCPeerConnection(servers);
+	localPeerConnection = new RTCPeerConnection(servers, pcConstraint);
 	logMsg('Created local peer connection object localPeerConnection.');
 
+	sendChannel = localPeerConnection.createDataChannel('sendDataChannel',dataConstraint);
+  	logMsg('Created send data channel');
+
+	localPeerConnection.addStream(localStream);
 	localPeerConnection.addEventListener('icecandidate', handleConnection);
 	localPeerConnection.addEventListener('iceconnectionstatechange', handleConnectionChange);
 
-	remotePeerConnection = new RTCPeerConnection(servers);
+	sendChannel.onopen = onSendChannelStateChange;
+	sendChannel.onclose = onSendChannelStateChange;
+
+	remotePeerConnection = new RTCPeerConnection(servers, pcConstraint);
 	logMsg('Created remote peer connection object remotePeerConnection.');
 
 	remotePeerConnection.addEventListener('icecandidate', handleConnection);
 	remotePeerConnection.addEventListener('iceconnectionstatechange', handleConnectionChange);
 
 	remotePeerConnection.addEventListener('addstream', gotRemoteMediaStream);
+	remotePeerConnection.ondatachannel = receiveChannelCallback;
 
 	// Add local stream to connection and create offer to connect.
-	localPeerConnection.addStream(localStream);
 	logMsg('Added local stream to localPeerConnection.');
 
 	logMsg('localPeerConnection createOffer start.');
@@ -230,6 +245,11 @@ function hangupRemoteStream()
 	remotePeerConnection.close();
 	localPeerConnection = null;
 	remotePeerConnection = null;
+
+	logMsg('Closing data channels');
+	sendChannel.close();
+	logMsg('Closed data channel with label: ' + sendChannel.label);
+	receiveChannel.close();
 	
 	logMsg('Ending call.');
 	document.querySelector('#startButton').disabled=false;
@@ -237,14 +257,55 @@ function hangupRemoteStream()
 	document.querySelector('#hangupButton').disabled=true;
 }
 
+function onSendChannelStateChange()
+{
+	var readyState = sendChannel.readyState;
+	logMsg('Send channel state is: ' + readyState);
+	if (readyState === 'open') {
+		dataChannelSend.disabled = false;
+		dataChannelSend.focus();
+		sendButton.disabled = false;
+	}
+	else {
+		dataChannelSend.disabled = true;
+		sendButton.disabled = true;
+	}
+}
+
+function receiveChannelCallback(event)
+{
+	logMsg('Receive Channel Callback');
+	receiveChannel = event.channel;
+	receiveChannel.onmessage = onReceiveMessageCallback;
+	receiveChannel.onopen = onReceiveChannelStateChange;
+	receiveChannel.onclose = onReceiveChannelStateChange;
+}
+
+function onReceiveMessageCallback(event)
+{
+	logMsg('Received Message');
+	dataChannelReceive.value = event.data;
+}
+
+function onReceiveChannelStateChange()
+{
+	var readyState = receiveChannel.readyState;
+	logMsg('Receive channel state is: ' + readyState);
+}
+
+document.getElementById('sendButton').addEventListener('click', (event) => {
+	let data = dataChannelSend.value;
+	sendChannel.send(data);
+	logMsg('Sent Data: ' + data);
+});
+
 document.querySelector('#startButton').addEventListener('click', (event) => {
 	let quality = document.querySelector('#quaility').value;
 	initLocalStream(quality);
 });
 
 document.querySelector('#callButton').addEventListener('click', (event) => {
-  	startTime = window.performance.now();
-	logMsg('Starting call on '+startTime);
+	logMsg('Starting call');
 
 	let quality = document.querySelector('#quaility').value;
 	initRemoteStream(quality);

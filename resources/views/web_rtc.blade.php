@@ -16,6 +16,19 @@
 				</div>
 			</div>
 		</div>
+		<div class="row mt-2">
+			<div class="col-md-6">
+				<div class="card align-items-center">
+					<textarea name="senderMessage" id="dataChannelSend" rows="5" class="w-100 form-control"></textarea>
+				</div>
+				<button class="btn btn-primary mt-2" id="sendButton"> Send </button>
+			</div>
+			<div class="col-md-6">
+				<div class="card align-items-center">
+					<textarea name="receiverMessage" id="dataChannelReceive" rows="5" class="w-100 form-control"></textarea>
+				</div>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-md-6 mt-2">
 				<div class="form-group">
