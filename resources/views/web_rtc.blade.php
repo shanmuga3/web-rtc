@@ -16,6 +16,7 @@
 				</div>
 			</div>
 		</div>
+		{{--
 		<div class="row mt-2">
 			<div class="col-md-6">
 				<div class="card align-items-center">
@@ -29,6 +30,7 @@
 				</div>
 			</div>
 		</div>
+		--}}
 		<div class="row">
 			<div class="col-md-6 mt-2">
 				<div class="form-group">
