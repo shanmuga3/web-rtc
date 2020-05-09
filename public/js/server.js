@@ -19,18 +19,7 @@ io.on('connection', (socket) => {
 	socket.on('disconnect', () => {
 		io.emit('user disconnected');
 	});
-
-	socket.on('ipaddr', () => {
-		var ifaces = os.networkInterfaces();
-		for (var dev in ifaces) {
-			ifaces[dev].forEach((details) => {
-				if (details.family === 'IPv4' && details.address !== '127.0.0.1') {
-					socket.emit('ipaddr', details.address);
-				}
-			});
-		}
-	});
-
+	
 	socket.on('message', function(message) {
 		log('Client said: ', message);
 		socket.broadcast.emit('message', message);
